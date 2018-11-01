@@ -56,22 +56,22 @@ class User implements UserInterface
 
     /**
      * @var string
-     * 
-     * @ORM\Column(type="string", length=255, nullable=false)
+     *  
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $paypalMeLink;
 
     /**
      * @var string
      * 
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatarLink;
 
     /**
      * @var DateTime
      * 
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
@@ -295,6 +295,6 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        
+
     }
 }
