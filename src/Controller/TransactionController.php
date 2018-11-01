@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransactionController extends ApiController
 {
     /**
-    * @Route("/transactionController", methods="GET")
+    * @Route("/transaction", methods="GET")
     */
     public function index(TransactionRepository $transactionRepository)
     {
@@ -24,7 +24,7 @@ class TransactionController extends ApiController
     }
 
     /**
-    * @Route("/transactionController", methods="POST")
+    * @Route("/transaction", methods="POST")
     */
     public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
     {
