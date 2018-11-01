@@ -82,6 +82,7 @@
     },
     "namshi/jose": {
         "version": "7.2.3"
+    },
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
@@ -163,10 +164,9 @@
     "symfony/http-kernel": {
         "version": "v4.1.6"
     },
-<<<<<<< HEAD
     "symfony/inflector": {
         "version": "v4.1.6"
-=======
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -175,7 +175,6 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
->>>>>>> transactions
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
