@@ -1,0 +1,16 @@
+db_keshek:
+  image: tutum/mysql:5.6
+  ports:
+    - "3306:3306"
+  environment:
+   MYSQL_USER: root
+   MYSQL_PASS: 123456
+
+db_pma:
+  image: dnhsoft/phpmyadmin:4.6.4
+  links:
+   - db_keshbek
+  ports:
+   - "8001:80"
+  environment:
+   DBHOST: db_keshbek
