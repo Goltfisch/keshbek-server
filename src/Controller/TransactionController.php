@@ -14,13 +14,33 @@ class TransactionController extends ApiController
     /**
     * @Route("/transaction", methods="GET")
     */
-    public function index(TransactionRepository $transactionRepository)
+    public function index(Request $request, TransactionRepository $transactionRepository)
     {
-        if (! $this->isAuthorized()) {
-            return $this->respondUnauthorized();
+        $userId = (int) $request->get('userId');
+
+        $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
+
+        return $this->respond($userTransactions);
+    }
+
+    /**
+    * @Route("/transaction/{id}/", methods="GET")
+    */
+    public function showTransaction(Request $request, TransactionRepository $transactionRepository)
+    {
+        $transactionId = (int) $request->get('id');
+        $userId = (int) $request->get('userId');
+
+        $transaction = $transactionRepository->findOneBy(['id' => $transactionId]);
+        $transaction = $transactionRepository->transform($transaction);
+
+        if($transaction['creditorId'] == $userId || $transaction['debitorId'] == $userId)
+        {
+            return $this->respondCreated($transaction);
         }
-        // $movies = $movieRepository->transformAll();
-        // return $this->respond($movies);
+
+        return $this->respond('Not allowed');
+
     }
 
     /**

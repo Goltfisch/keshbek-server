@@ -19,56 +19,37 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
-//    /**
-//     * @return Transaction[] Returns an array of Transaction objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getTransactionsByUserId($userId)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('transaction')
+            ->where('transaction.creditorId = :userId')
+            ->orWhere('transaction.debitorId = :userId')
+            ->setParameter('userId', $userId)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getArrayResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Transaction
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
     public function transform(Transaction $transaction)
     {
         return [
                 'id'    => (int) $transaction->getId(),
-                'reditorId' => (int) $transaction->getCreditorId(),
+                'creditorId' => (int) $transaction->getCreditorId(),
                 'debitorId' => (int) $transaction->getDebitorId(),
                 'amount' => (int) $transaction->getAmount(),
                 'reason' => (string) $transaction->getReason(),
                 'transactionDate' => $transaction->getTransactionDate(),
                 'stateId' => (int) $transaction->getStateId(),
-                'state' => $transaction->getState()
+                'state' => (string) $transaction->getState()->getLabel()
         ];
     }
 
     public function transformAll()
     {
-     $transactions = $this->findAll();
-     $transactionsArray = [];
-     foreach ($transactions as $transaction) {
-         $transactionsArray[] = $this->transform($transaction);
-     }
-     return $transactionsArray;
+        $transactions = $this->findAll();
+        $transactionsArray = [];
+        foreach ($transactions as $transaction) {
+            $transactionsArray[] = $this->transform($transaction);
+        }
+        return $transactionsArray;
     }
 }
