@@ -1,0 +1,167 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ */
+class Transaction
+{
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     *
+     * @var \App\Entity\State
+     *
+     * @ManyToOne(targetEntity="State")
+     * @JoinColumn(name="stateId", referencedColumnName="id")
+     *
+     */
+    protected $state;
+
+    /**
+     * @ORM\Column(type="integer", name="creditorId", nullable=false)
+     */
+    private $creditorId;
+
+    /**
+     * @ORM\Column(type="integer", name="debitorId", nullable=false)
+     */
+    private $debitorId;
+
+    /**
+     * @ORM\Column(type="float", name="amount", nullable=false)
+     */
+    private $amount;
+
+    /**
+     * @ORM\Column(type="string", length=255, name="reason", nullable=false)
+     */
+    private $reason;
+
+    /**
+     * @ORM\Column(type="datetime", name="transactionDate", nullable=false)
+     */
+    private $transactionDate;
+
+    /**
+     * @ORM\Column(type="datetime", name="createdAt", nullable=false)
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="integer", name="stateId", nullable=false)
+     */
+    private $stateId;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCreditorId(): ?int
+    {
+        return $this->creditorId;
+    }
+
+    public function setCreditorId(int $creditorId): self
+    {
+        $this->creditorId = $creditorId;
+
+        return $this;
+    }
+
+    public function getDebitorId(): ?int
+    {
+        return $this->debitorId;
+    }
+
+    public function setDebitorId(int $debitorId): self
+    {
+        $this->debitorId = $debitorId;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(string $reason): self
+    {
+        $this->reason = $reason;
+
+        return $this;
+    }
+
+    public function getTransactionDate(): ?\DateTimeInterface
+    {
+        return $this->transactionDate;
+    }
+
+    public function setTransactionDate(\DateTimeInterface $transactionDate): self
+    {
+        $this->transactionDate = $transactionDate;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(): self
+    {
+        $createdAt = new \DateTime();
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getStateId(): ?int
+    {
+        return $this->stateId;
+    }
+
+    public function setStateId(int $stateId): self
+    {
+        $this->stateId = $stateId;
+
+        return $this;
+    }
+
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+}
