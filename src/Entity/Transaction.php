@@ -54,7 +54,7 @@ class Transaction
     private $transactionDate;
 
     /**
-     * @ORM\Column(type="datetime", name="createdAt")
+     * @ORM\Column(type="datetime", name="createdAt", nullable=false)
      */
     private $createdAt;
 

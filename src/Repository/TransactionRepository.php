@@ -57,7 +57,6 @@ class TransactionRepository extends ServiceEntityRepository
                 'amount' => (int) $transaction->getAmount(),
                 'reason' => (string) $transaction->getReason(),
                 'transactionDate' => $transaction->getTransactionDate(),
-                'createdAt' => $transaction->getCreatedAt(),
                 'stateId' => (int) $transaction->getStateId(),
                 'state' => $transaction->getState()
         ];

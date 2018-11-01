@@ -30,9 +30,8 @@ class TransactionController extends ApiController
     {
         $stateId = (int) $request->get('stateId');
 
-        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-08-14 11:45:45');
-        // $transactionDate = date($request->get('transactionDate'));
-        // $creationDate = date($request->get('createdAt'));
+        // $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-08-14 11:45:45');
+        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('transactionDate'));
         $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
 
         // persist the new Transaction
@@ -42,6 +41,7 @@ class TransactionController extends ApiController
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
+        $transaction->setCreatedAt();
         $transaction->setStateId($stateId);
         $transaction->setState($state);
 
