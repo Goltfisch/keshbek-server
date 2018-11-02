@@ -4,6 +4,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -35,5 +36,15 @@ class AuthController extends AbstractController
     public function api()
     {
         return new Response(sprintf('Logged in as %s', $this->getUser()->getUsername()));
+    }
+
+    public function me()
+    {
+        return new JsonResponse($this->getUser());
+    }
+
+    public function refresh()
+    {
+        return new JsonResponse(['success' => true]);
     }
 }

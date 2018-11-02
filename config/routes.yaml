@@ -1,5 +1,5 @@
 register:
-    path: /api/register
+    path: /register
     controller: App\Controller\AuthController::register
     methods: POST
 
@@ -7,5 +7,14 @@ api:
     path: /api
     controller: App\Controller\AuthController::api
 
-api_login_check:
-    path: /api/login_check
+login:
+    path:     /api/auth/login
+    methods:  [POST]
+
+user:
+    path: /api/auth/user
+    controller: App\Controller\AuthController::me
+
+refresh:
+    path: /api/auth/refresh
+    controller: App\Controller\AuthController::refresh

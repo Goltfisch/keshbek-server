@@ -10,23 +10,20 @@ security:
                 property: username
 
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
         login:
-            pattern:  ^/api/login
+            pattern:  ^/api/auth/login
             stateless: true
             anonymous: true
             json_login:
-                check_path: /api/login_check
+                check_path: /api/auth/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
+        
         register:
-            pattern:  ^/api/register
+            pattern:  ^/register
             stateless: true
             anonymous: true
-
+        
         api:
             pattern:  ^/api
             stateless: true
@@ -35,8 +32,11 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
 
     access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
