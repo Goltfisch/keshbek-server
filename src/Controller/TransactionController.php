@@ -48,22 +48,24 @@ class TransactionController extends ApiController
     */
     public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
     {
-        $stateId = (int) $request->get('stateId');
+        $request = $this->transformJsonBody($request);
 
-        // $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-08-14 11:45:45');
-        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('transactionDate'));
-        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
+        $stateId = 1;
+
+        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-08-14 11:45:45');
+        //$transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('date'));
+        //$state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
 
         // persist the new Transaction
-        $transaction = new Transaction;
-        $transaction->setCreditorId($request->get('creditorId'));
+        $transaction = new Transaction();
+        $transaction->setCreditorId($request->request->get('creditorId'));
         $transaction->setDebitorId($request->get('debitorId'));
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
         $transaction->setCreatedAt();
-        $transaction->setStateId($stateId);
-        $transaction->setState($state);
+        $transaction->setStateId(1);
+        //$transaction->setState($state);
 
         $em->persist($transaction);
         $em->flush();
