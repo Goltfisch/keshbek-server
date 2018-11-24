@@ -50,22 +50,19 @@ class TransactionController extends ApiController
     {
         $request = $this->transformJsonBody($request);
 
-        $stateId = 1;
+        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
 
-        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-08-14 11:45:45');
-        //$transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('date'));
-        //$state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
+        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
 
         // persist the new Transaction
         $transaction = new Transaction();
-        $transaction->setCreditorId($request->request->get('creditorId'));
+        $transaction->setCreditorId($request->get('creditorId'));
         $transaction->setDebitorId($request->get('debitorId'));
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
         $transaction->setCreatedAt();
-        $transaction->setStateId(1);
-        //$transaction->setState($state);
+        $transaction->setState($state);
 
         $em->persist($transaction);
         $em->flush();
