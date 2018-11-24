@@ -12,11 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransactionController extends ApiController
 {
     /**
-    * @Route("/transaction", methods="GET")
+    * @Route("/api/transaction", methods="GET")
     */
     public function index(Request $request, TransactionRepository $transactionRepository)
     {
-        $userId = (int) $request->get('userId');
+        $userId = (int) $this->getUser()->getId();
 
         $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
 
@@ -53,11 +53,13 @@ class TransactionController extends ApiController
         $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
 
         $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
+        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
+        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
 
         // persist the new Transaction
         $transaction = new Transaction();
-        $transaction->setCreditorId($request->get('creditorId'));
-        $transaction->setDebitorId($request->get('debitorId'));
+        $transaction->setCreditor($creditor);
+        $transaction->setDebitor($debitor);
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);

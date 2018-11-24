@@ -21,24 +21,31 @@ class TransactionRepository extends ServiceEntityRepository
 
     public function getTransactionsByUserId($userId)
     {
-        return $this->createQueryBuilder('transaction')
+        $transactionsArray = [];
+
+        $transactions = $this->createQueryBuilder('transaction')
             ->where('transaction.creditorId = :userId')
             ->orWhere('transaction.debitorId = :userId')
             ->setParameter('userId', $userId)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
+
+        foreach($transactions as $transaction) {
+            $transactionsArray[] = $this->transform($transaction);
+        }
+
+        return $transactionsArray;
     }
 
     public function transform(Transaction $transaction)
     {
         return [
-                'id'    => (int) $transaction->getId(),
-                'creditorId' => (int) $transaction->getCreditorId(),
-                'debitorId' => (int) $transaction->getDebitorId(),
+                'id' => (int) $transaction->getId(),
+                'creditor' => (string) $transaction->getCreditor()->getFirstname() . ' ' . $transaction->getCreditor()->getLastname(),
+                'debitor' => (string) $transaction->getDebitor()->getFirstname() . ' ' . $transaction->getDebitor()->getLastname(),
                 'amount' => (int) $transaction->getAmount(),
                 'reason' => (string) $transaction->getReason(),
                 'transactionDate' => $transaction->getTransactionDate(),
-                'stateId' => (int) $transaction->getStateId(),
                 'state' => (string) $transaction->getState()->getLabel()
         ];
     }
