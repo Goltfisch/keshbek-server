@@ -29,6 +29,24 @@ class Transaction
     protected $state;
 
     /**
+     * 
+     * @var \App\Entity\User
+     * 
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="creditorId", referencedColumnName="id")
+     */
+    protected $creditor;
+
+    /**
+     * 
+     * @var \App\Entity\User
+     * 
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="debitorId", referencedColumnName="id")
+     */
+    protected $debitor;
+
+    /**
      * @ORM\Column(type="integer", name="creditorId", nullable=false)
      */
     private $creditorId;
@@ -76,6 +94,30 @@ class Transaction
     public function setCreditorId(int $creditorId): self
     {
         $this->creditorId = $creditorId;
+
+        return $this;
+    }
+
+    public function getCreditor()
+    {
+        return $this->creditor;
+    }
+
+    public function setCreditor($creditor)
+    {
+        $this->creditor = $creditor;
+        
+        return $this;
+    }
+
+    public function getDebitor()
+    {
+        return $this->debitor;
+    }
+
+    public function setDebitor($debitor)
+    {
+        $this->debitor = $debitor;
 
         return $this;
     }
