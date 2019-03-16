@@ -24,12 +24,12 @@ class TransactionController extends ApiController
     }
 
     /**
-    * @Route("/transaction/{id}/", methods="GET")
+    * @Route("/api/transaction/{id}/", methods="GET")
     */
     public function showTransaction(Request $request, TransactionRepository $transactionRepository)
     {
         $transactionId = (int) $request->get('id');
-        $userId = (int) $request->get('userId');
+        $userId = (int) $this->getUser()->getId();
 
         $transaction = $transactionRepository->findOneBy(['id' => $transactionId]);
         $transaction = $transactionRepository->transform($transaction);
@@ -40,7 +40,6 @@ class TransactionController extends ApiController
         }
 
         return $this->respond('Not allowed');
-
     }
 
     /**
@@ -73,24 +72,27 @@ class TransactionController extends ApiController
     }
 
     /**
-    * @Route("/transaction/{id}", methods="PUT")
+    * @Route("/api/transaction/{id}", methods="PUT")
     */
     public function update(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
     {
-        $stateId = (int) $request->get('id');
-        $transactionId = (int) $request->get('transactionId');
+        $stateId = 1;
+        $transactionId = (int) $request->get('id');
 
-        $transactionDate = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('transactionDate'));
+        $request = $this->transformJsonBody($request);
+
+        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
         $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
+        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
+        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
 
         // persist the new Transaction
         $transaction = $transactionRepository->findOneBy(['id' => $transactionId]);
-        $transaction->setCreditorId($request->get('creditorId'));
-        $transaction->setDebitorId($request->get('debitorId'));
+        $transaction->setCreditor($creditor);
+        $transaction->setDebitor($debitor);
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
-        $transaction->setStateId($stateId);
         $transaction->setState($state);
 
         $em->persist($transaction);
