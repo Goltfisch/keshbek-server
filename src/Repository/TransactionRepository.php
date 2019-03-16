@@ -42,7 +42,9 @@ class TransactionRepository extends ServiceEntityRepository
         return [
                 'id' => (int) $transaction->getId(),
                 'creditor' => (string) $transaction->getCreditor()->getFirstname() . ' ' . $transaction->getCreditor()->getLastname(),
+                'creditorId' => (int) $transaction->getCreditorId(),
                 'debitor' => (string) $transaction->getDebitor()->getFirstname() . ' ' . $transaction->getDebitor()->getLastname(),
+                'debitorId' => (int) $transaction->getDebitorId(),
                 'amount' => (int) $transaction->getAmount(),
                 'reason' => (string) $transaction->getReason(),
                 'transactionDate' => $transaction->getTransactionDate(),
