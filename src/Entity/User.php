@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
     /**
      * @var int
-     * 
+     *
      * @ORM\Column(type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,56 +22,56 @@ class User implements UserInterface
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=120, unique=true)
      */
     private $email;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=25, unique=true)
      */
     private $username;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $password;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $firstname;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $lastname;
 
     /**
      * @var string
-     *  
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $paypalMeLink;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatarLink;
 
     /**
      * @var DateTime
-     * 
+     *
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -270,7 +271,7 @@ class User implements UserInterface
 
     /**
      * Get the salt
-     * 
+     *
      * @return null|string
      */
     public function getSalt()
@@ -280,7 +281,7 @@ class User implements UserInterface
 
     /**
      * Get the roles of the user
-     * 
+     *
      * @return array
      */
     public function getRoles()
@@ -290,11 +291,10 @@ class User implements UserInterface
 
     /**
      * Erase the credentils
-     * 
+     *
      * @return void
      */
     public function eraseCredentials()
     {
-
     }
 }
