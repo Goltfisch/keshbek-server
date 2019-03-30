@@ -36,7 +36,7 @@ class CashUp
     private $createdAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\State", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\State", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $state;
@@ -58,24 +58,24 @@ class CashUp
 
     public function getCreditor(): ?User
     {
-        return $this->creditorId;
+        return $this->creditor;
     }
 
-    public function setCreditor(?User $creditorId): self
+    public function setCreditor(?User $creditor): self
     {
-        $this->creditorId = $creditorId;
+        $this->creditor = $creditor;
 
         return $this;
     }
 
     public function getDebitor(): ?User
     {
-        return $this->debitorId;
+        return $this->debitor;
     }
 
-    public function setDebitor(?User $debitorId): self
+    public function setDebitor(?User $debitor): self
     {
-        $this->debitorId = $debitorId;
+        $this->debitor = $debitor;
 
         return $this;
     }
@@ -85,8 +85,12 @@ class CashUp
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt($createdAt = 'now'): self
     {
+        if ($createdAt = 'now') {
+            $createdAt = new \DateTime();
+        }
+
         $this->createdAt = $createdAt;
 
         return $this;
@@ -94,12 +98,12 @@ class CashUp
 
     public function getState(): ?State
     {
-        return $this->stateId;
+        return $this->state;
     }
 
-    public function setState(State $stateId): self
+    public function setState(State $state): self
     {
-        $this->stateId = $stateId;
+        $this->state = $state;
 
         return $this;
     }
