@@ -22,13 +22,13 @@ class CashUp
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $creditorId;
+    private $creditor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $debitorId;
+    private $debitor;
 
     /**
      * @ORM\Column(type="datetime")
@@ -39,10 +39,10 @@ class CashUp
      * @ORM\OneToOne(targetEntity="App\Entity\State", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $stateId;
+    private $state;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="cashUpId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="cashUp", orphanRemoval=true)
      */
     private $transactions;
 
@@ -56,24 +56,24 @@ class CashUp
         return $this->id;
     }
 
-    public function getCreditorId(): ?User
+    public function getCreditor(): ?User
     {
         return $this->creditorId;
     }
 
-    public function setCreditorId(?User $creditorId): self
+    public function setCreditor(?User $creditorId): self
     {
         $this->creditorId = $creditorId;
 
         return $this;
     }
 
-    public function getDebitorId(): ?User
+    public function getDebitor(): ?User
     {
         return $this->debitorId;
     }
 
-    public function setDebitorId(?User $debitorId): self
+    public function setDebitor(?User $debitorId): self
     {
         $this->debitorId = $debitorId;
 
@@ -92,12 +92,12 @@ class CashUp
         return $this;
     }
 
-    public function getStateId(): ?State
+    public function getState(): ?State
     {
         return $this->stateId;
     }
 
-    public function setStateId(State $stateId): self
+    public function setState(State $stateId): self
     {
         $this->stateId = $stateId;
 
@@ -116,7 +116,7 @@ class CashUp
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions[] = $transaction;
-            $transaction->setCashUpId($this);
+            $transaction->setCashUp($this);
         }
 
         return $this;
@@ -127,8 +127,8 @@ class CashUp
         if ($this->transactions->contains($transaction)) {
             $this->transactions->removeElement($transaction);
             // set the owning side to null (unless already changed)
-            if ($transaction->getCashUpId() === $this) {
-                $transaction->setCashUpId(null);
+            if ($transaction->getCashUp() === $this) {
+                $transaction->setCashUp(null);
             }
         }
 
