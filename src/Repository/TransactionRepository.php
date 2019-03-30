@@ -30,7 +30,7 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
-        foreach($transactions as $transaction) {
+        foreach ($transactions as $transaction) {
             $transactionsArray[] = $this->transform($transaction);
         }
 
@@ -48,7 +48,6 @@ class TransactionRepository extends ServiceEntityRepository
                 'amount' => (int) $transaction->getAmount(),
                 'reason' => (string) $transaction->getReason(),
                 'transactionDate' => $transaction->getTransactionDate(),
-                'state' => (string) $transaction->getState()->getLabel()
         ];
     }
 

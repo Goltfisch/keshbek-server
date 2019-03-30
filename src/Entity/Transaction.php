@@ -68,7 +68,7 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CashUp", inversedBy="transactions")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $cashUp;
 
