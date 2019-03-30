@@ -70,7 +70,7 @@ class Transaction
      * @ORM\ManyToOne(targetEntity="App\Entity\CashUp", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $cashUpId;
+    private $cashUp;
 
     public function getId(): ?int
     {
@@ -174,14 +174,14 @@ class Transaction
         return $this;
     }
 
-    public function getCashUpId(): ?CashUp
+    public function getCashUp(): ?CashUp
     {
-        return $this->cashUpId;
+        return $this->cashUp;
     }
 
-    public function setCashUpId(?CashUp $cashUpId): self
+    public function setCashUp(?CashUp $cashUp): self
     {
-        $this->cashUpId = $cashUpId;
+        $this->cashUp = $cashUp;
 
         return $this;
     }
