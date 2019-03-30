@@ -58,18 +58,6 @@ class TransactionController extends ApiController
     }
 
     /**
-    * @Route("/api/transaction", methods="GET")
-    */
-    public function index(Request $request, TransactionRepository $transactionRepository)
-    {
-        $userId = (int) $this->getUser()->getId();
-
-        $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
-
-        return $this->respond($userTransactions);
-    }
-
-    /**
     * @Route("/api/transaction/{id}", methods="GET")
     */
     public function showTransaction(Request $request, TransactionRepository $transactionRepository)
@@ -86,35 +74,6 @@ class TransactionController extends ApiController
         }
 
         return $this->respond('Not allowed');
-    }
-
-    /**
-    * @Route("/transaction", methods="POST")
-    */
-    public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
-    {
-        $request = $this->transformJsonBody($request);
-
-        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
-
-        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
-        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
-        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
-
-        // persist the new Transaction
-        $transaction = new Transaction();
-        $transaction->setCreditor($creditor);
-        $transaction->setDebitor($debitor);
-        $transaction->setAmount($request->get('amount'));
-        $transaction->setReason($request->get('reason'));
-        $transaction->setTransactionDate($transactionDate);
-        $transaction->setCreatedAt();
-        $transaction->setState($state);
-
-        $em->persist($transaction);
-        $em->flush();
-
-        return $this->respondCreated($transactionRepository->transform($transaction));
     }
 
     /**
@@ -159,5 +118,46 @@ class TransactionController extends ApiController
         $em->flush();
 
         return $this->respond([ 'response' => 'Transaction was deleted successfully.' ]);
+    }
+
+    /**
+    * @Route("/api/transaction", methods="GET")
+    */
+    public function index(Request $request, TransactionRepository $transactionRepository)
+    {
+        $userId = (int) $this->getUser()->getId();
+
+        $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
+
+        return $this->respond($userTransactions);
+    }
+
+    /**
+    * @Route("/api/transaction", methods="POST")
+    */
+    public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
+
+        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
+        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
+        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
+
+        // persist the new Transaction
+        $transaction = new Transaction();
+        $transaction->setCreditor($creditor);
+        $transaction->setDebitor($debitor);
+        $transaction->setAmount($request->get('amount'));
+        $transaction->setReason($request->get('reason'));
+        $transaction->setTransactionDate($transactionDate);
+        $transaction->setCreatedAt();
+        $transaction->setState($state);
+
+        $em->persist($transaction);
+        $em->flush();
+
+        return $this->respondCreated($transactionRepository->transform($transaction));
     }
 }
