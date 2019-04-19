@@ -14,6 +14,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class StateRepository extends ServiceEntityRepository
 {
+    const STATE_OPEN_ID = 1;
+    const STATE_SENT_ID = 2;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, State::class);

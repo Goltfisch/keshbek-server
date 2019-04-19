@@ -40,14 +40,14 @@ class TransactionRepository extends ServiceEntityRepository
     public function transform(Transaction $transaction)
     {
         return [
-                'id' => (int) $transaction->getId(),
-                'creditor' => (string) $transaction->getCreditor()->getFirstname() . ' ' . $transaction->getCreditor()->getLastname(),
-                'creditorId' => (int) $transaction->getCreditorId(),
-                'debitor' => (string) $transaction->getDebitor()->getFirstname() . ' ' . $transaction->getDebitor()->getLastname(),
-                'debitorId' => (int) $transaction->getDebitorId(),
-                'amount' => (int) $transaction->getAmount(),
-                'reason' => (string) $transaction->getReason(),
-                'transactionDate' => $transaction->getTransactionDate(),
+            'id' => (int) $transaction->getId(),
+            'creditor' => (string) $transaction->getCreditor()->getFirstname() . ' ' . $transaction->getCreditor()->getLastname(),
+            'creditorId' => (int) $transaction->getCreditorId(),
+            'debitor' => (string) $transaction->getDebitor()->getFirstname() . ' ' . $transaction->getDebitor()->getLastname(),
+            'debitorId' => (int) $transaction->getDebitorId(),
+            'amount' => (int) $transaction->getAmount(),
+            'reason' => (string) $transaction->getReason(),
+            'transactionDate' => $transaction->getTransactionDate(),
         ];
     }
 
@@ -59,5 +59,20 @@ class TransactionRepository extends ServiceEntityRepository
             $transactionsArray[] = $this->transform($transaction);
         }
         return $transactionsArray;
+    }
+
+    public function getUnassignedTransactionIds()
+    {
+        $transactions = $this->findBy(['cashUp' => null]);
+
+        $transactionIds = [];
+
+        foreach ($transactions as $transaction) {
+            $transactionIds[] = $transaction->getId();
+        }
+
+        $transactionIds = array_filter($transactionIds);
+
+        return $transactionIds;
     }
 }

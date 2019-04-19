@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\CashUp;
+use App\Entity\State;
+use App\Repository\StateRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,32 +21,24 @@ class CashUpRepository extends ServiceEntityRepository
         parent::__construct($registry, CashUp::class);
     }
 
-//    /**
-//     * @return CashUp[] Returns an array of CashUp objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getNewCashUpIds()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $openState = $this->getEntityManager()->getRepository(State::class)->findOneBy(['id' => StateRepository::STATE_OPEN_ID]);
+        $cashUps = $this->findBy(['state' => $openState]);
 
-    /*
-    public function findOneBySomeField($value): ?CashUp
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $newCachUpIds = [];
+
+        foreach ($cashUps as $cashUp) {
+            $newCachUpIds[] = $cashUp->getId();
+        }
+
+        $newCachUpIds = array_filter($newCachUpIds);
+
+        return $newCachUpIds;
     }
-    */
+
+    public function getDueCashUpIds()
+    {
+        // returns ids of all due cash ups
+    }
 }
