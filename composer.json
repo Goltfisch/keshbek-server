@@ -12,6 +12,9 @@
         "symfony/framework-bundle": "*",
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "*",
+        "symfony/swiftmailer-bundle": "^3.2",
+        "symfony/templating": "4.1.*",
+        "symfony/twig-bundle": "4.1.*",
         "symfony/yaml": "*"
     },
     "require-dev": {

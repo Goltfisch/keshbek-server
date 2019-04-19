@@ -11,8 +11,14 @@
             "ref": "fc52d86631a6dfd9fdf3381d0b7e3df2069e51b3"
         }
     },
+    "egulias/email-validator": {
+        "version": "2.1.7"
+    },
     "nikic/php-parser": {
         "version": "v4.1.0"
+    },
+    "swiftmailer/swiftmailer": {
+        "version": "v6.2.0"
     },
     "symfony/maker-bundle": {
         "version": "1.0",
@@ -23,7 +29,45 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.11.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.11.0"
+    },
     "symfony/stopwatch": {
         "version": "v4.1.11"
+    },
+    "symfony/swiftmailer-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "3db029c03e452b4a23f7fc45cec7c922c2247eb8"
+        }
+    },
+    "symfony/templating": {
+        "version": "v4.1.12"
+    },
+    "symfony/twig-bridge": {
+        "version": "v4.1.12"
+    },
+    "symfony/twig-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "369b5b29dc52b2c190002825ae7ec24ab6f962dd"
+        },
+        "files": [
+            "config/packages/twig.yaml",
+            "config/routes/dev/twig.yaml",
+            "templates/base.html.twig"
+        ]
+    },
+    "twig/twig": {
+        "version": "v2.8.1"
     }
 }
