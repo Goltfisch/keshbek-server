@@ -11,9 +11,13 @@ use App\Repository\TransactionRepository;
 use App\Entity\CashUp;
 use App\Entity\User;
 use App\Entity\State;
+use App\Service\CashUpHelper;
+use App\Service\CashUpMailer;
 
 class CashUpCommand extends Command
 {
+    const STATE_OPEN_ID = 1;
+
     protected static $defaultName = 'keshbek:cash-up';
 
     /**
@@ -21,9 +25,14 @@ class CashUpCommand extends Command
      */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        CashUpHelper $cashUpHelper,
+        CashUpMailer $cashUpMailer
+    ) {
         $this->entityManager = $entityManager;
+        $this->cashUpHelper = $cashUpHelper;
+        $this->cashUpMailer = $cashUpMailer;
 
         parent::__construct();
     }
@@ -39,90 +48,35 @@ class CashUpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            'Start of cash-up',
+            'Start of cash-up process',
             '============',
             '',
         ]);
 
         $transactionRepository = $this->entityManager->getRepository(Transaction::class);
+        $cashUpRepository = $this->entityManager->getRepository(CashUp::class);
 
-        if (!$transactionRepository) {
-            $output->writeln('Transaction-Repository not found!');
-            return;
+        $unassignedTransactionIds = $transactionRepository->getUnassignedTransactionIds();
+
+        if ($unassignedTransactionIds) {
+            $this->cashUpHelper->createFromTransactionIds($unassignedTransactionIds);
+        } else {
+            $output->writeln([
+                'No open transactions.',
+                '',
+            ]);
         }
 
-        $openTransactions = $transactionRepository->findBy(['cashUp' => null]);
+        $newCashUpIds = $cashUpRepository->getNewCashUpIds();
+        $debitors = $this->cashUpHelper->prepareDebitors($newCashUpIds);
 
-        if (!$openTransactions) {
-            $output->writeln('No open transactions.');
-            return;
+        foreach ($debitors as $debitorData) {
+            $this->cashUpMailer->sendMail($debitorData, CashUpMailer::TEMPLATE_NEW);
         }
-
-        $openTransactionsArray = [];
-        foreach ($openTransactions as $transaction) {
-            $openTransactionsArray[] = $transactionRepository->transform($transaction);
-        }
-
-        $debitors = [];
-
-        foreach ($openTransactionsArray as $openTransaction) {
-            $debitors[$openTransaction['debitorId']][$openTransaction['creditorId']][] = $openTransaction['id'];
-        }
-
-        $userRepository = $this->entityManager->getRepository(User::class);
-        $stateRepository = $this->entityManager->getRepository(State::class);
-
-        // TODO: Implement a cleaner way
-        $state = $stateRepository->findOneBy(['id' => 1]);
-
-        foreach ($debitors as $debitorId => $creditors) {
-            $debitor = $userRepository->findOneBy(['id' => $debitorId]);
-
-            if (!$debitor) {
-                continue;
-            }
-
-            foreach ($creditors as $creditorId => $transactionIds) {
-                $creditor = $userRepository->findOneBy(['id' => $creditorId]);
-
-                if (!$creditor) {
-                    continue;
-                }
-
-                $cashUp = new CashUp();
-
-                $cashUp->setDebitor($debitor);
-                $cashUp->setCreditor($creditor);
-                $cashUp->setState($state);
-                $cashUp->setCreatedAt();
-
-                $this->entityManager->persist($cashUp);
-                $this->entityManager->flush();
-
-                foreach ($transactionIds as $transactionId) {
-                    $transaction = $transactionRepository->findOneBy(['id' => $transactionId]);
-
-                    if (!$transaction) {
-                        continue;
-                    }
-
-                    $cashUp->addTransaction($transaction);
-                }
-            }
-        }
-
-        $output->writeln('Cashups succesfully created!');
 
         $output->writeln([
-            '',
             '============',
-            'End cash-up',
+            'End cash-up process',
         ]);
-
-        //Für jede debitor-kreditor Verknüpfung einen neuen Kassensturz erstellen; Status wird auf “Offen” gestellt
-
-        //alle kassenstürze für einen Debitor zusammenfassen und in eine Email packen
-
-        //Kassensturz-Status wird auf “Aussenstehend” gestellt
     }
 }
