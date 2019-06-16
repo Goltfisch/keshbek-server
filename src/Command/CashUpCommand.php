@@ -16,8 +16,6 @@ use App\Service\CashUpMailer;
 
 class CashUpCommand extends Command
 {
-    const STATE_OPEN_ID = 1;
-
     protected static $defaultName = 'keshbek:cash-up';
 
     /**
