@@ -13,7 +13,7 @@ class TransactionController extends ApiController
      * @Route("/api/transaction/demo", methods="GET")
      */
     public function generateDemoData(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
-    {
+    {        
         $demoTransactions = [
             [
                 'amount' => 100,
@@ -37,7 +37,7 @@ class TransactionController extends ApiController
         $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => 1]);
         $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => 2]);
 
-        foreach ($demoTransactions as $demoTransaction) {
+        foreach($demoTransactions as $demoTransaction) {
             $transaction = new Transaction();
             $transaction->setCreditor($creditor);
             $transaction->setDebitor($debitor);
@@ -54,18 +54,6 @@ class TransactionController extends ApiController
     }
 
     /**
-    * @Route("/api/transaction", methods="GET")
-    */
-    public function index(Request $request, TransactionRepository $transactionRepository)
-    {
-        $userId = (int) $this->getUser()->getId();
-
-        $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
-
-        return $this->respond($userTransactions);
-    }
-
-    /**
     * @Route("/api/transaction/{id}", methods="GET")
     */
     public function showTransaction(Request $request, TransactionRepository $transactionRepository)
@@ -76,38 +64,12 @@ class TransactionController extends ApiController
         $transaction = $transactionRepository->findOneBy(['id' => $transactionId]);
         $transaction = $transactionRepository->transform($transaction);
 
-        if ($transaction['creditorId'] == $userId || $transaction['debitorId'] == $userId) {
+        if($transaction['creditorId'] == $userId || $transaction['debitorId'] == $userId)
+        {
             return $this->respondCreated($transaction);
         }
 
         return $this->respond('Not allowed');
-    }
-
-    /**
-    * @Route("/transaction", methods="POST")
-    */
-    public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
-    {
-        $request = $this->transformJsonBody($request);
-
-        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
-
-        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
-        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
-
-        // persist the new Transaction
-        $transaction = new Transaction();
-        $transaction->setCreditor($creditor);
-        $transaction->setDebitor($debitor);
-        $transaction->setAmount($request->get('amount'));
-        $transaction->setReason($request->get('reason'));
-        $transaction->setTransactionDate($transactionDate);
-        $transaction->setCreatedAt();
-
-        $em->persist($transaction);
-        $em->flush();
-
-        return $this->respondCreated($transactionRepository->transform($transaction));
     }
 
     /**
@@ -149,5 +111,44 @@ class TransactionController extends ApiController
         $em->flush();
 
         return $this->respond([ 'response' => 'Transaction was deleted successfully.' ]);
+    }
+
+    /**
+    * @Route("/api/transaction", methods="GET")
+    */
+    public function index(Request $request, TransactionRepository $transactionRepository)
+    {
+        $userId = (int) $this->getUser()->getId();
+
+        $userTransactions = $transactionRepository->getTransactionsByUserId($userId);
+
+        return $this->respond($userTransactions);
+    }
+
+    /**
+    * @Route("/api/transaction", methods="POST")
+    */
+    public function create(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
+
+        $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
+        $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
+
+        // persist the new Transaction
+        $transaction = new Transaction();
+        $transaction->setCreditor($creditor);
+        $transaction->setDebitor($debitor);
+        $transaction->setAmount($request->get('amount'));
+        $transaction->setReason($request->get('reason'));
+        $transaction->setTransactionDate($transactionDate);
+        $transaction->setCreatedAt();
+
+        $em->persist($transaction);
+        $em->flush();
+
+        return $this->respondCreated($transactionRepository->transform($transaction));
     }
 }

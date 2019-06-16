@@ -1,25 +1,33 @@
 # keshbek-server
 
 ## Requirements
-- php 7.1.3 or higher
+- php 7.2.0 or higher
 - docker
+- composer
 
 ## Installation
-1. move into the `keshbek-server/` directory
-2. run `docker-compose up -d` to start the database in a docker container
-3. create a file namend `.env` in the project directory with demo configuration:
+
+### Install dependencies
+1. Navigate to the project's root directory.
+1. Run `composer install`
+2. In the `.env`-file, adjust DATABASE_URL to:
 ```
-APP_ENV=dev
-APP_SECRET=XXX
-#TRUSTED_PROXIES=127.0.0.1,127.0.0.2
-#TRUSTED_HOSTS=localhost,example.com
 DATABASE_URL=mysql://root:123456@127.0.0.1:3306/keshbek
 ```
-4. open `localhost:8001` in your browser to open phpMyAdmin
-5. create the database `keshbek`
-6. Migrate `php bin/console doctrine:migrations:migrate`
-7. run this command `php -S 127.0.0.1:8000 -t public` to run the symfony server
-8. now you can open the symfony projekt on `localhost:8000`
+
+### Generate keys for JWT
+1. Navigate to the project's root directory.
+2. run `mkdir config/jwt`.
+3. Run `openssl genrsa -out config/jwt/private.pem -aes256 4096`. Here, you will be asked for a pass phrase two times. Both times, copy and paste the value of the `JWT_PASSPHRASE`-setting in your `.env`-file (f.ex. 64e0b28d693886fc0c3ce975d6c2fb26).
+4. Run `openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem`. Here you also need to enter the `JWT_PASSPHRASE`-setting when asked.
+
+### Start database-server and create database
+1. Navigate to the project's root directory.
+2. Run `docker-compose up -d` to start the database in a docker container.
+3. Open `localhost:8001` in your browser to open phpMyAdmin and create the database `keshbek`.
+9. Back in the terminal, run `php bin/console doctrine:migrations:migrate` and enter `y` when asked.
+10. Run `php -S 127.0.0.1:8000 -t public` to run the symfony server
+11. Now you can open the symfony projekt on `localhost:8000`
 
 ## Register new user
 For development you can create an user with postman (or other tools).
