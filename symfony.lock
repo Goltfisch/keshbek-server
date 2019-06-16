@@ -53,10 +53,6 @@
             "ref": "fc52d86631a6dfd9fdf3381d0b7e3df2069e51b3"
         }
     },
-<<<<<<< HEAD
-    "egulias/email-validator": {
-        "version": "2.1.7"
-=======
     "doctrine/doctrine-migrations-bundle": {
         "version": "1.2",
         "recipe": {
@@ -94,6 +90,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "egulias/email-validator": {
+        "version": "2.1.7"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -126,15 +125,10 @@
         "files": [
             "config/packages/nelmio_cors.yaml"
         ]
->>>>>>> master
     },
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
-<<<<<<< HEAD
-    "swiftmailer/swiftmailer": {
-        "version": "v6.2.0"
-=======
     "ocramius/proxy-manager": {
         "version": "2.2.2"
     },
@@ -149,6 +143,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "swiftmailer/swiftmailer": {
+        "version": "v6.2.0"
     },
     "symfony/cache": {
         "version": "v4.1.11"
@@ -229,7 +226,6 @@
     },
     "symfony/inflector": {
         "version": "v4.1.11"
->>>>>>> master
     },
     "symfony/maker-bundle": {
         "version": "1.0",
@@ -240,18 +236,17 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
-<<<<<<< HEAD
-    "symfony/polyfill-intl-idn": {
-        "version": "v1.11.0"
-    },
-    "symfony/polyfill-php72": {
-        "version": "v1.11.0"
-=======
     "symfony/orm-pack": {
         "version": "v1.0.6"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.11.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.11.0"
     },
     "symfony/property-access": {
         "version": "v4.1.11"
@@ -285,12 +280,10 @@
         "files": [
             "config/packages/security.yaml"
         ]
->>>>>>> master
     },
     "symfony/stopwatch": {
         "version": "v4.1.11"
     },
-<<<<<<< HEAD
     "symfony/swiftmailer-bundle": {
         "version": "2.5",
         "recipe": {
@@ -320,17 +313,16 @@
             "templates/base.html.twig"
         ]
     },
-    "twig/twig": {
-        "version": "v2.8.1"
-=======
     "symfony/yaml": {
         "version": "v4.1.11"
+    },
+    "twig/twig": {
+        "version": "v2.8.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.1"
->>>>>>> master
     }
 }
