@@ -42,3 +42,9 @@ _password
 _firstname
 _lastname
 ```
+
+## Known errors
+
+### Database changes
+
+When someone implements changes to database structure (f.ex. to the 'transaction'-table), the tables should be emptied before running new migrations to prevent errors, which could eventuelly lead to recreating the database.
