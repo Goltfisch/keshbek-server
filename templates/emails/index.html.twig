@@ -1,1 +1,13 @@
-Demo-Content
+{% block mail_salutation %}
+    Hallo {{ name }},<br /><br />
+{% endblock %}
+
+{% block mail_content %}
+{% endblock %}
+
+{% block mail_footer %}
+    <br />
+    <br />
+    Herzliche Grüße,<br />
+    dein Keshbek-Team
+{% endblock %}

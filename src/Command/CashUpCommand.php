@@ -68,9 +68,19 @@ class CashUpCommand extends Command
         $newCashUpIds = $cashUpRepository->getNewCashUpIds();
         $debitors = $this->cashUpHelper->prepareDebitors($newCashUpIds);
 
+        $proccessedCashUps = [];
+
         foreach ($debitors as $debitorData) {
-            $this->cashUpMailer->sendMail($debitorData, CashUpMailer::TEMPLATE_NEW);
+            $success = $this->cashUpMailer->sendMail($debitorData, CashUpMailer::TEMPLATE_NEW, CashUpMailer::TEMPLATE_NEW_SUBJECT);
+
+            if ($success) {
+                foreach ($debitorData['creditors'] as $creditor) {
+                    $proccessedCashUps[] = $creditor['cashUpId'];
+                }
+            }
         }
+
+        $cashUpRepository->updateStates($proccessedCashUps);
 
         $output->writeln([
             '============',

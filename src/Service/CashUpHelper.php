@@ -162,13 +162,14 @@ class CashUpHelper
                 ->where('t.cash_up_id = :cashUpId')
                 ->setParameter('cashUpId', $cashUp['cashUpId'])
                 ->execute()
-                ->fetchAll(\PDO::FETCH_COLUMN);
+                ->fetch(\PDO::FETCH_COLUMN);
 
             $debitors[$cashUp['debitorId']]['creditors'][$cashUp['creditorId']] = [
                 'firstname' => $cashUp['creditorFirstname'],
                 'lastname' => $cashUp['creditorLastname'],
                 'paypalMeLink' => $cashUp['creditorPaypalMeLink'],
-                'amount' => $amount
+                'amount' => $amount,
+                'cashUpId' => $cashUp['cashUpId']
             ];
         }
 

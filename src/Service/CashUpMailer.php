@@ -7,7 +7,10 @@ use Symfony\Component\Templating\EngineInterface;
 class CashUpMailer
 {
     const TEMPLATE_NEW = 'emails/new.html.twig';
+    const TEMPLATE_NEW_SUBJECT = 'Neuer Kassensturz';
+
     const TEMPLATE_DUE = 'emails/due.html.twig';
+    const TEMPLATE_DUE_SUBJECT = 'Zahlung fällig';
 
     /**
      * @var \Swift_Mailer $mailer
@@ -27,23 +30,33 @@ class CashUpMailer
         $this->template = $template;
     }
 
-    public function sendMail($data, $template = self::TEMPLATE_NEW)
+    public function sendMail($data, $template = self::TEMPLATE_NEW, $subject = self::TEMPLATE_NEW_SUBJECT)
     {
-        $message = (new \Swift_Message('Hello Email'))
-        ->setFrom('send@example.com')
-        ->setTo('daniel.wolf.web@gmail.com')
-        ->setBody(
-            $this->template->render(
-                $template,
-                ['name' => 'demoName']
-            ),
-            'text/html'
-        );
+        $name = $data['debitorData']['firstname'] . ' ' . $data['debitorData']['lastname'];
+        $email = $data['debitorData']['email'];
+        $creditors = $data['creditors'];
+
+        if (!$name || !$email || !$creditors) {
+            return;
+        }
+        
+        $message = (new \Swift_Message($subject))
+
+            ->setFrom('support@8mylez.com')
+            ->setTo($email)
+            ->setBody(
+                $this->template->render(
+                    $template,
+                    [
+                        'name' => $name,
+                        'creditors' => $creditors
+                    ]
+                ),
+                'text/html'
+           );
 
         $this->mailer->send($message);
-        //insert data into $template
 
-        //send Email
-        //Kassensturz-Status wird auf “Aussenstehend” gestellt
+        return true;
     }
 }

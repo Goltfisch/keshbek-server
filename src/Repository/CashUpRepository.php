@@ -23,8 +23,8 @@ class CashUpRepository extends ServiceEntityRepository
 
     public function getNewCashUpIds()
     {
-        $openState = $this->getEntityManager()->getRepository(State::class)->findOneBy(['id' => StateRepository::STATE_OPEN_ID]);
-        $cashUps = $this->findBy(['state' => $openState]);
+        $newState = $this->getEntityManager()->getRepository(State::class)->findOneBy(['id' => StateRepository::STATE_NEW_ID]);
+        $cashUps = $this->findBy(['state' => $newState]);
 
         $newCachUpIds = [];
 
@@ -40,5 +40,27 @@ class CashUpRepository extends ServiceEntityRepository
     public function getDueCashUpIds()
     {
         // returns ids of all due cash ups
+    }
+
+    public function updateStates(array $cashUpIds)
+    {
+        if (!$cashUpIds) {
+            return;
+        }
+
+        $openState = $this->getEntityManager()->getRepository(State::class)->findOneBy(['id' => StateRepository::STATE_OPEN_ID]);
+
+        if (!$openState) {
+            return;
+        }
+
+        $cashUps = $this->findBy(['id' => $cashUpIds]);
+
+        foreach ($cashUps as $cashUp) {
+            $cashUp->setState($openState);
+            
+            $this->_em->persist($cashUp);
+            $this->_em->flush();
+        }
     }
 }

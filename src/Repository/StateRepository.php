@@ -14,40 +14,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class StateRepository extends ServiceEntityRepository
 {
-    const STATE_OPEN_ID = 1;
-    const STATE_SENT_ID = 2;
+    const STATE_NEW_ID = 1;
+    const STATE_OPEN_ID = 2;
 
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, State::class);
     }
-
-//    /**
-//     * @return State[] Returns an array of State objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?State
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
