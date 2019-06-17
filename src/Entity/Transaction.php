@@ -20,27 +20,17 @@ class Transaction
 
     /**
      *
-     * @var \App\Entity\State
-     *
-     * @ManyToOne(targetEntity="State")
-     * @JoinColumn(name="stateId", referencedColumnName="id")
-     *
-     */
-    protected $state;
-
-    /**
-     * 
      * @var \App\Entity\User
-     * 
+     *
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="creditorId", referencedColumnName="id")
      */
     protected $creditor;
 
     /**
-     * 
+     *
      * @var \App\Entity\User
-     * 
+     *
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="debitorId", referencedColumnName="id")
      */
@@ -77,9 +67,10 @@ class Transaction
     private $createdAt;
 
     /**
-     * @ORM\Column(type="integer", name="stateId", nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\CashUp", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $stateId;
+    private $cashUp;
 
     public function getId(): ?int
     {
@@ -106,7 +97,7 @@ class Transaction
     public function setCreditor($creditor)
     {
         $this->creditor = $creditor;
-        
+
         return $this;
     }
 
@@ -183,26 +174,14 @@ class Transaction
         return $this;
     }
 
-    public function getStateId(): ?int
+    public function getCashUp(): ?CashUp
     {
-        return $this->stateId;
+        return $this->cashUp;
     }
 
-    public function setStateId(int $stateId): self
+    public function setCashUp(?CashUp $cashUp): self
     {
-        $this->stateId = $stateId;
-
-        return $this;
-    }
-
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    public function setState($state)
-    {
-        $this->state = $state;
+        $this->cashUp = $cashUp;
 
         return $this;
     }

@@ -1,0 +1,13 @@
+{% extends 'emails/index.html.twig' %}
+
+{% block mail_content %}
+    hier einmal die Abrechnung:<br />
+    <br />
+    Du schuldest ...<br />
+    <br />
+    {% for creditor in creditors %}
+        ... {{ creditor.firstname }} {{ creditor.lastname }} - {{ creditor.amount }}€ - {{creditor.paypalMeLink}}/{{ creditor.amount }}<br />
+    {% endfor %}
+    <br />
+    Viel Spaß beim bezahlen 💸
+{% endblock %}

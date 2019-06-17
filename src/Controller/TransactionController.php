@@ -3,8 +3,6 @@ namespace App\Controller;
 
 use App\Entity\Transaction;
 use App\Repository\TransactionRepository;
-use App\Entity\State;
-use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +34,6 @@ class TransactionController extends ApiController
         ];
 
         $transactionDate = \DateTime::createFromFormat('d.m.Y', '23.03.2019');
-        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
         $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => 1]);
         $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => 2]);
 
@@ -48,7 +45,6 @@ class TransactionController extends ApiController
             $transaction->setReason($demoTransaction['reason']);
             $transaction->setTransactionDate($transactionDate);
             $transaction->setCreatedAt();
-            $transaction->setState($state);
 
             $em->persist($transaction);
             $em->flush();
@@ -81,13 +77,11 @@ class TransactionController extends ApiController
     */
     public function update(Request $request, TransactionRepository $transactionRepository, EntityManagerInterface $em)
     {
-        $stateId = 1;
         $transactionId = (int) $request->get('id');
 
         $request = $this->transformJsonBody($request);
 
         $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
-        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => $stateId]);
         $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
         $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
 
@@ -98,7 +92,6 @@ class TransactionController extends ApiController
         $transaction->setAmount($request->get('amount'));
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
-        $transaction->setState($state);
 
         $em->persist($transaction);
         $em->flush();
@@ -141,7 +134,6 @@ class TransactionController extends ApiController
 
         $transactionDate = \DateTime::createFromFormat('d.m.Y', $request->get('transactionDate'));
 
-        $state = $em->getRepository('App\Entity\State')->findOneBy(['id' => 1]);
         $creditor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('creditorId')]);
         $debitor = $em->getRepository('App\Entity\User')->findOneBy(['id' => $request->get('debitorId')]);
 
@@ -153,7 +145,6 @@ class TransactionController extends ApiController
         $transaction->setReason($request->get('reason'));
         $transaction->setTransactionDate($transactionDate);
         $transaction->setCreatedAt();
-        $transaction->setState($state);
 
         $em->persist($transaction);
         $em->flush();

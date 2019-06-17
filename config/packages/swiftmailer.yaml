@@ -1,0 +1,14 @@
+swiftmailer:
+    transport:        gmail
+    username:         danielwolfk@googlemail.com
+    password:         fW4-H4r-vUz-9Bk
+    host:             localhost
+    port:             465
+    encryption:       ssl
+    auth-mode:        login
+    spool: { type: 'memory' }
+    stream_options:
+        ssl:
+            allow_self_signed: true
+            verify_peer: false
+            verify_peer_name: false
